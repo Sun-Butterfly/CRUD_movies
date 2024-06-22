@@ -11,8 +11,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CRUD_movies.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20240620201121_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240622124606_add_user_like")]
+    partial class add_user_like
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,36 @@ namespace CRUD_movies.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MovieUser", b =>
+                {
+                    b.Property<long>("MoviesId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UsersId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("MoviesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("UserLike", (string)null);
+                });
+
+            modelBuilder.Entity("MovieUser", b =>
+                {
+                    b.HasOne("CRUD_movies.Movie", null)
+                        .WithMany()
+                        .HasForeignKey("MoviesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CRUD_movies.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
