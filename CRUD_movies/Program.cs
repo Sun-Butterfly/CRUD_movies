@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen(x => x.SwaggerDoc("v1", new OpenApiInfo()
     Version = "1.0"
 }));
 builder.Services.AddEndpointsApiExplorer();
+
 var app = builder.Build();
 
 app.UseSwagger();
@@ -21,6 +22,9 @@ app.UseSwaggerUI(options => // UseSwaggerUI is called only in Development.
 {
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
 });
+
+app.UseMiddleware<LoggerMiddleware>();
+
 app.MapGet("/", () => "Hello World!");
 
 app.UseRouting();
